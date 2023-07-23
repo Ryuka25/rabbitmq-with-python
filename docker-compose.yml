@@ -1,0 +1,23 @@
+version: "3"
+
+services:
+  rabbitmq-server:
+    hostname: rabbitmq-server
+    build: ./rabbitmq-server
+    ports:
+      - "15672:15672"
+      - "5672:5672"
+    volumes:
+      - rabbitmq-data:/var/lib/rabbitmq
+  python-app:
+    build: ./python-app
+    tty: true # Run this as interactive; shortcut for followinc command:
+    # command: tail -f /dev/null
+    # command: tail -F anything   # capital "F"
+    volumes:
+      - ./python-app/src:/app/src # Setting up dev environments
+    environment:
+      - RABBITMQ_HOST=rabbitmq-server
+
+volumes:
+  rabbitmq-data:
